@@ -2,11 +2,11 @@ const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
 const { UserModel } = require("./model/userModel");
-const PORT = process.env.PORT || 5000;
 const app = express();
 const router = express.Router();
 const cors = require("cors");
-const fs = require("fs");
+
+const PORT = process.env.PORT || 5000;
 
 // router.get("/", async (req, res) => {
 //   res.status(200).send({ status: "success", data: [] });
