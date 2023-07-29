@@ -29,18 +29,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/id", async (req, res) => {
-  fs.readFile("./id.json", "utf8", (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).send({ message: "Server Error", data: [] });
-    }
-    return res
-      .status(200)
-      .send({ message: "user fetch succesfully", data: data });
-  });
-});
-
 router.post("/create", async (req, res) => {
   try {
     console.log(req.body);
