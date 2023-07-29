@@ -1,0 +1,60 @@
+const dotenv = require("dotenv");
+dotenv.config();
+const express = require("express");
+const { UserModel } = require("./model/userModel");
+const PORT = process.env.PORT || 5000;
+const app = express();
+const router = express.Router();
+const cors = require("cors");
+const fs = require("fs");
+
+// router.get("/", async (req, res) => {
+//   res.status(200).send({ status: "success", data: [] });
+// });
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+router.get("/", async (req, res) => {
+  try {
+    const users = await UserModel.find({});
+    res.status(200).send({ message: "user fetch succesfully", data: users });
+  } catch (error) {
+    res.status(500).send({ message: "Server Error", data: [] });
+  }
+});
+
+router.get("/id", async (req, res) => {
+  fs.readFile("./id.json", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({ message: "Server Error", data: [] });
+    }
+    return res
+      .status(200)
+      .send({ message: "user fetch succesfully", data: data });
+  });
+});
+
+router.post("/create", async (req, res) => {
+  try {
+    console.log(req.body);
+    const user = new UserModel({ ...req.body });
+    await user.save();
+    res.status(201).send({ message: "user created succesfully", data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error", data: [] });
+  }
+});
+
+app.use("/api/v1/users", router);
+
+app.listen(PORT, async () => {
+  console.log(`server running on ${PORT}`);
+});
